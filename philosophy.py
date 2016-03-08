@@ -11,7 +11,7 @@ class PhilosophyGame:
 		self.jump_counter = 0
 
 
-	def get_next(self, new_URL):
+	def get_next_page_title(self, new_URL):
 	    in_file = self.opener.open(new_URL)
 	    page = in_file.read()
 	    soup = BeautifulSoup(page)
@@ -42,18 +42,18 @@ class PhilosophyGame:
 	def philosophy_game(self):
 		new_URL = 'http://en.wikipedia.org/wiki/' + str(sys.argv[1])
 		self.visited_URLs.append(new_URL)
-		new_page = self.get_next(new_URL)
+		new_page = self.get_next_page_title(new_URL)
 		if new_page == 'Philosophy':
 		    return self.visited_URLs, self.counter
 		while new_page != 'Philosophy' and self.jump_counter < 100:
 			if new_page == None:
-				new_page = self.get_next(self.visited_URLs[-1])
+				new_page = self.get_next_page_title(self.visited_URLs[-1])
 			elif new_page in self.visited_URLs:
-				new_page = self.get_next(self.visited_URLs[-1])
+				new_page = self.get_next_page_title(self.visited_URLs[-1])
 			else:
 				new_URL = 'http://en.wikipedia.org/w/index.php?title=' + new_page
 				self.visited_URLs.append(new_URL)
-				new_page = self.get_next(new_URL)
+				new_page = self.get_next_page_title(new_URL)
 				print 'Now jumping to the ' + str(new_page) + ' page.'
 				self.jump_counter += 1
 		return "Max jumps reached before reaching the Philosophy"
