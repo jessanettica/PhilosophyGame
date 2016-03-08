@@ -2,7 +2,6 @@ import urllib2
 import sys
 from BeautifulSoup import BeautifulSoup
 
-#TODO: delete generating random link. Let it take a Wikipedia page name -> sys.argv[1]
 class PhilosophyGame:
 	def __init__(self):
 		self.opener = urllib2.build_opener()
@@ -41,30 +40,22 @@ class PhilosophyGame:
 		
 
 	def philosophy_game(self):
-		new_URL = 'http://en.wikipedia.org/wiki/Puppy'
+		new_URL = 'http://en.wikipedia.org/wiki/' + str(sys.argv[1])
 		self.visited_URLs.append(new_URL)
 		new_page = self.get_next(new_URL)
-		visited = set()
 		if new_page == 'Philosophy':
-		    print('You\'ve arrived at the Philosophy page! Whooo')
 		    return self.visited_URLs, self.counter
 		while new_page != 'Philosophy' and self.jump_counter < 100:
 			if new_page == None:
 				new_page = self.get_next(self.visited_URLs[-1])
-
-			elif new_page in visited:
+			elif new_page in self.visited_URLs:
 				new_page = self.get_next(self.visited_URLs[-1])
-				print 'Oops already went there. Now jumping to the ' + new_page + ' page.'
-
 			else:
-				visited.add(new_page)
 				new_URL = 'http://en.wikipedia.org/w/index.php?title=' + new_page
 				self.visited_URLs.append(new_URL)
 				new_page = self.get_next(new_URL)
-
 				print 'Now jumping to the ' + str(new_page) + ' page.'
 				self.jump_counter += 1
-				print self.jump_counter
 		return "Max jumps reached before reaching the Philosophy"
 
 p = PhilosophyGame()
